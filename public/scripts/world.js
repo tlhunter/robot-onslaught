@@ -32,6 +32,11 @@ World.prototype.preload = function() {
     this.game.load.audio('shoot', 'audio/shoot.wav');
     this.game.load.audio('spawn', 'audio/spawn.wav');
 
+    // Map Data
+    this.game.load.tilemap('background', 'data/level_0_0-background.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('middleground', 'data/level_0_0-middleground.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('foreground', 'data/level_0_0-foreground.csv', null, Phaser.Tilemap.CSV);
+
     // Game Settings
     this.game.world.setBounds(0, 0, 100 * this.BLOCK.w, 100 * this.BLOCK.h);
     this.game.renderer.roundPixels = true;
@@ -62,11 +67,7 @@ World.prototype.create = function() {
     this.foreground = this.game.add.group();
     this.foreground.enableBody = false;
 
-    for (var y = 0; y < 100; y++) {
-        for (var x = 0; x < 100; x++) {
-            this.background.create(x * this.BLOCK.w, y * this.BLOCK.h, 'terrain', 20);
-        }
-    }
+    this.buildMap();
 
     this.background.create(50 * this.BLOCK.w, 49 * this.BLOCK.h, 'terrain', 6);
     this.middleground.create(50 * this.BLOCK.w, 48 * this.BLOCK.h, 'terrain', 42);
@@ -80,23 +81,64 @@ World.prototype.update = function() {
     //this.game.physics.arcade.collide(pickups.entities, this.foreground);
 };
 
-/**
- * Draws the floor surfaces
- */
-World.prototype.drawBackground = function() {
+World.prototype.parseRawTilesheets = function() {
+    var raw = {};
+    var i;
 
+    raw.background = this.game.cache.getTilemapData('background').data.split('\n');
+    for (i = 0; i < raw.background.length; i++) {
+        raw.background[i] = raw.background[i].split(',');
+    }
+
+    delete raw.background[100];
+
+    raw.middleground = this.game.cache.getTilemapData('middleground').data.split('\n');
+    for (i = 0; i < raw.middleground.length; i++) {
+        raw.middleground[i] = raw.middleground[i].split(',');
+    }
+
+    delete raw.middleground[100];
+
+    raw.foreground = this.game.cache.getTilemapData('foreground').data.split('\n');
+    for (i = 0; i < raw.foreground.length; i++) {
+        raw.foreground[i] = raw.foreground[i].split(',');
+    }
+
+    delete raw.foreground[100];
+
+    return raw;
 };
 
 /**
- * Draws the collidable items, such as boxes
+ * This is a heavy process, so optimize the heck out of it
  */
-World.prototype.drawMiddleground = function() {
+World.prototype.buildMap = function() {
+    var raw_layers = this.parseRawTilesheets(),
+        bgl = raw_layers.background,
+        mgl = raw_layers.middleground,
+        fgl = raw_layers.foreground,
+        bg, mg, fg, xpos, ypos,
+        w = this.BLOCK.w,
+        h = this.BLOCK.h;
 
-};
+    for (var y = 0; y < 100; y++) {
+        for (var x = 0; x < 100; x++) {
+            xpos = x * w;
+            ypos = y * h;
+            bg = parseInt(bgl[x][y], 10);
+            if (bg >= 0) {
+                this.background.create(xpos, ypos, 'terrain', bg);
+            }
 
-/**
- * Draws the items which can occlude the players, such as box tops
- */
-World.prototype.drawForeground = function() {
+            mg = parseInt(mgl[x][y], 10);
+            if (mg >= 0) {
+                this.middleground.create(xpos, ypos, 'terrain', mg);
+            }
 
+            fg = parseInt(fgl[x][y], 10);
+            if (fg >= 0) {
+                this.foreground.create(xpos, ypos, 'terrain', fg);
+            }
+        }
+    }
 };
