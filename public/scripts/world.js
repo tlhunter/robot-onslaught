@@ -49,7 +49,7 @@ World.prototype.create = function() {
         spawn: this.game.add.audio('spawn')
     };
 
-    //this.music.play('', 0, 0.1, true);
+    this.music.play('', 0, 0.1, true);
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -63,6 +63,9 @@ World.prototype.create = function() {
     this.foreground.enableBody = false;
 
     this.background.create(50 * this.BLOCK.w, 50 * this.BLOCK.h, 'terrain', 20);
+    this.background.create(50 * this.BLOCK.w, 49 * this.BLOCK.h, 'terrain', 6);
+    this.background.create(50 * this.BLOCK.w, 48 * this.BLOCK.h, 'terrain', 42);
+    this.foreground.create(50 * this.BLOCK.w, 47 * this.BLOCK.h, 'terrain', 30);
 };
 
 World.prototype.update = function() {

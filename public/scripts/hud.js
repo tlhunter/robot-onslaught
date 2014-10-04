@@ -29,27 +29,23 @@ HUD.prototype.create = function() {
     this.hud.enableBody = false;
     this.hud.fixedToCamera = true;
 
-    this.text.score = this.game.add.text(40, 8, 'PT: 0', this.FONT);
-    this.text.health = this.game.add.text(40, 32, '<3: 20', this.FONT);
-    this.text.info = this.game.add.text(40, 56, 'Z, X, Left, Right', this.FONT_SMALL);
-    this.text.debug = this.game.add.text(40, 80, '', this.FONT_SMALL);
+    this.text.score = this.game.add.text(40, 8, 'POINTS: 0', this.FONT);
+    this.text.health = this.game.add.text(40, 32, 'HEALTH: 5/5', this.FONT);
+    this.text.debug = this.game.add.text(40, 56, '', this.FONT_SMALL);
 
     this.hud.add(this.text.score);
     this.hud.add(this.text.health);
-    this.hud.add(this.text.info);
     this.hud.add(this.text.debug);
 };
 
 HUD.prototype.update = function() {
     var text = "";
 
-    text += " X: " + player.entity.body.x + "\n";
-    text += " Y: " + player.entity.body.y + "\n";
-    text += "dX: " + player.entity.body.velocity.x + "\n";
-    text += "dY: " + player.entity.body.velocity.y + "\n";
-    text += "__: " + player.entity.body.touching.down + "\n";
-    text += "FR: " + this.game.time.fps;
+    var pos = player.getCoordinate(false);
+
+    text += "POS: " + pos.x + "," + pos.y + "\n";
+    text += "FPS: " + this.game.time.fps + "/60";
 
     this.text.debug.text = text;
-    this.text.health.text = "<3: " + player.health;
+    this.text.health.text = "HEALTH: " + player.health + "/5";
 };

@@ -32,21 +32,26 @@ Player.prototype.create = function() {
 
 Player.prototype.update = function() {
     this.entity.body.velocity.x = this.entity.body.velocity.y = 0;
+    var moving = false;
 
     if (this.goNorth()) {
-        this.entity.body.velocity.y = -300;
+        this.entity.body.velocity.y -= 200;
+        moving = true;
     }
 
     if (this.goSouth()) {
-        this.entity.body.velocity.y = 300;
+        this.entity.body.velocity.y += 200;
+        moving = true;
     }
 
     if (this.goWest()) {
-        this.entity.body.velocity.x = -300;
+        this.entity.body.velocity.x -= 200;
+        moving = true;
     }
 
     if (this.goEast()) {
-        this.entity.body.velocity.x = 300;
+        this.entity.body.velocity.x += 200;
+        moving = true;
     }
 
     if (this.isFiring()) {
@@ -58,23 +63,59 @@ Player.prototype.update = function() {
         }
     }
 
+    // Phaser seems incapable of snapping to full pixels :'(
+    if (!moving) {
+        this.entity.body.x = Math.round(this.entity.body.x);
+        this.entity.body.y = Math.round(this.entity.body.y);
+    }
+
     this.game.camera.follow(this.entity);
 };
 
+Player.prototype.getCoordinate = function(accurate) {
+    if (accurate) {
+        return {
+            x: this.entity.body.x / world.BLOCK.w,
+            y: this.entity.body.y / world.BLOCK.h
+        }
+    } else {
+        return {
+            x: Math.floor(this.entity.body.x / world.BLOCK.w),
+            y: Math.floor(this.entity.body.y / world.BLOCK.h)
+        }
+    }
+};
+
 Player.prototype.goNorth = function() {
-    return this.keyboard.isDown(Phaser.Keyboard.UP) || this.keyboard.isDown(Phaser.Keyboard.W);
+    return this.keyboard.isDown(Phaser.Keyboard.W);
 };
 
 Player.prototype.goSouth = function() {
-    return this.keyboard.isDown(Phaser.Keyboard.DOWN) || this.keyboard.isDown(Phaser.Keyboard.S);
+    return this.keyboard.isDown(Phaser.Keyboard.S);
 };
 
 Player.prototype.goWest = function() {
-    return this.keyboard.isDown(Phaser.Keyboard.LEFT) || this.keyboard.isDown(Phaser.Keyboard.A);
+    return this.keyboard.isDown(Phaser.Keyboard.A);
 };
 
 Player.prototype.goEast = function() {
-    return this.keyboard.isDown(Phaser.Keyboard.RIGHT) || this.keyboard.isDown(Phaser.Keyboard.D);
+    return this.keyboard.isDown(Phaser.Keyboard.D);
+};
+
+Player.prototype.aimNorth = function() {
+    return this.keyboard.isDown(Phaser.Keyboard.UP);
+};
+
+Player.prototype.aimSouth = function() {
+    return this.keyboard.isDown(Phaser.Keyboard.DOWN);
+};
+
+Player.prototype.aimWest = function() {
+    return this.keyboard.isDown(Phaser.Keyboard.LEFT);
+};
+
+Player.prototype.aimEast = function() {
+    return this.keyboard.isDown(Phaser.Keyboard.RIGHT);
 };
 
 Player.prototype.isFiring = function() {
