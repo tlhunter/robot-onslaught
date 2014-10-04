@@ -30,6 +30,8 @@ Player.prototype.create = function() {
     this.entity.animations.add('dead', [3], 1000, false);
 
     this.entity.animations.play('alive');
+
+    world.middleground.add(this.entity);
 };
 
 Player.prototype.update = function() {

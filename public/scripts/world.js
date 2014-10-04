@@ -61,7 +61,6 @@ World.prototype.create = function() {
 
     this.foreground = this.game.add.group();
     this.foreground.enableBody = false;
-    this.foreground.z = 100;
 
     for (var y = 0; y < 100; y++) {
         for (var x = 0; x < 100; x++) {
