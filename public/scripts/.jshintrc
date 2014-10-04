@@ -1,0 +1,12 @@
+{
+	"node": false,
+	"browser": true,
+	"jquery": true,
+	"globalstrict": true,
+	"devel": true,
+	"loopfunc": true,
+	"globals": {
+		"client_id": true,
+		"PUBNUB": true
+	}
+}

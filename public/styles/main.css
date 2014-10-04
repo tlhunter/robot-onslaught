@@ -1,0 +1,28 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #1f1d2c;
+    text-align: center;
+    font-size: 8px;
+    font-family: "Press Start 2P";
+    color: #fff;
+}
+
+body > #gamefield {
+
+}
+body > #gamefield > canvas {
+    margin: 0 auto;
+}
+
+body > h1 {
+    font-size: 24px;
+}
+
+body > #credits {
+    line-height: 12px;
+}
+
+a {
+    color: #a1cad4;
+}

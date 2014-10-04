@@ -1,0 +1,5 @@
+{
+    "subscribe": "demo",
+    "publish": "demo",
+    "channel": "level:0:0"
+}
