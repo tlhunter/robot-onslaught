@@ -61,8 +61,14 @@ World.prototype.create = function() {
 
     this.foreground = this.game.add.group();
     this.foreground.enableBody = false;
+    this.foreground.z = 100;
 
-    this.background.create(50 * this.BLOCK.w, 50 * this.BLOCK.h, 'terrain', 20);
+    for (var y = 0; y < 100; y++) {
+        for (var x = 0; x < 100; x++) {
+            this.background.create(x * this.BLOCK.w, y * this.BLOCK.h, 'terrain', 20);
+        }
+    }
+
     this.background.create(50 * this.BLOCK.w, 49 * this.BLOCK.h, 'terrain', 6);
     this.middleground.create(50 * this.BLOCK.w, 48 * this.BLOCK.h, 'terrain', 42);
     this.foreground.create(50 * this.BLOCK.w, 47 * this.BLOCK.h, 'terrain', 30);

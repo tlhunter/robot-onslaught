@@ -29,9 +29,9 @@ HUD.prototype.create = function() {
     this.hud.enableBody = false;
     this.hud.fixedToCamera = true;
 
-    this.text.score = this.game.add.text(40, 8, 'POINTS: 0', this.FONT);
-    this.text.health = this.game.add.text(40, 32, 'HEALTH: 5/5', this.FONT);
-    this.text.debug = this.game.add.text(40, 56, '', this.FONT_SMALL);
+    this.text.score = this.game.add.text(16, 16, 'POINTS: 0', this.FONT);
+    this.text.health = this.game.add.text(16, 40, 'HEALTH: 5/5', this.FONT);
+    this.text.debug = this.game.add.text(16, 64, '', this.FONT_SMALL);
 
     this.hud.add(this.text.score);
     this.hud.add(this.text.health);
