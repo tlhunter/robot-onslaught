@@ -1,4 +1,4 @@
-# Robot Deathmatch
+# Robot Onslaught
 
 ![Screenshot](assets/screenshot.png)
 
@@ -6,7 +6,7 @@ Entry into the [PubNub 2014 Competition](http://pubnubgame.challengepost.com/) b
 
 ## Play The Game
 
-Visit [thomashunter.name:6000](http://thomashunter.name:6000) using a modern web browser.
+Visit [thomashunter.name:9000](http://thomashunter.name:9000) using a modern web browser.
 
 Use WASD to move and SPACE to shoot.
 
