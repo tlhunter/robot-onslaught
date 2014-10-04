@@ -1,7 +1,13 @@
 var client_id;
 var pubnub;
 
+
+
 $(function() {
+    progressJs().setOptions({
+        overlayMode: true,
+        theme: 'onslaught'
+    }).start();
     $.get('/config/pubnub.json', function (data) {
         client_id = PUBNUB.uuid();
 

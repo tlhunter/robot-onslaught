@@ -5,6 +5,7 @@ var Pickups = function(game) {
 };
 
 Pickups.prototype.preload = function() {
+    this.game.load.image('health', 'images/health.png');
 
 };
 

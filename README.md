@@ -17,4 +17,5 @@ Use WASD to move and SPACE to shoot.
 * Robot drawn in [GIMP](http://www.gimp.org/)
 * Uses the [Phaser Game Engine](http://phaser.io/)
 * Server built with [Node.js](http://nodejs.org/)
+* Progress bar using [Progress.js](http://usablica.github.io/progress.js/)
 * And of course, network transport via [PubNub](http://www.pubnub.com/)

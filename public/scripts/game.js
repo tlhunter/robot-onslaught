@@ -12,6 +12,7 @@ game = new Phaser.Game(24*32, 14*32, Phaser.AUTO, 'gamefield', {
     },
 
     create: function() {
+        progressJs().end();
         world.create();
         hud.create();
         player.create();
@@ -25,6 +26,11 @@ game = new Phaser.Game(24*32, 14*32, Phaser.AUTO, 'gamefield', {
         player.update();
         pickups.update();
         enemies.update();
+    },
+
+    loadUpdate: function() {
+        console.log('loadUpdate', game.load.progress);
+        progressJs().set(game.load.progress);
     }
 });
 
