@@ -1,3 +1,5 @@
+"use strict";
+
 var Pickups = function(game) {
     this.game = game;
 };

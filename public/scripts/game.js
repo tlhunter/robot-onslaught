@@ -1,3 +1,5 @@
+"use strict";
+
 var world, player, hud, pickups, enemies, game;
 
 game = new Phaser.Game(24*32, 14*32, Phaser.AUTO, 'gamefield', {

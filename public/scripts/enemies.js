@@ -1,3 +1,5 @@
+"use strict";
+
 var Enemies = function(game) {
     this.game = game;
 };

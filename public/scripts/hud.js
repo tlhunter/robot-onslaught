@@ -1,5 +1,23 @@
+"use strict";
+
 var HUD = function(game) {
     this.game = game;
+    this.text = {};
+    this.hud = null;
+};
+
+HUD.prototype.FONT = {
+    fill: '#ffffff',
+    font: '16px "Press Start 2P"',
+    stroke: '#000000',
+    strokeThickness: 4
+};
+
+HUD.prototype.FONT_SMALL = {
+    fill: '#ffffff',
+    font: '8px "Press Start 2P"',
+    stroke: '#000000',
+    strokeThickness: 2
 };
 
 HUD.prototype.preload = function() {
@@ -7,9 +25,31 @@ HUD.prototype.preload = function() {
 };
 
 HUD.prototype.create = function() {
+    this.hud = this.game.add.group();
+    this.hud.enableBody = false;
+    this.hud.fixedToCamera = true;
 
+    this.text.score = this.game.add.text(40, 8, 'PT: 0', this.FONT);
+    this.text.health = this.game.add.text(40, 32, '<3: 20', this.FONT);
+    this.text.info = this.game.add.text(40, 56, 'Z, X, Left, Right', this.FONT_SMALL);
+    this.text.debug = this.game.add.text(40, 80, '', this.FONT_SMALL);
+
+    this.hud.add(this.text.score);
+    this.hud.add(this.text.health);
+    this.hud.add(this.text.info);
+    this.hud.add(this.text.debug);
 };
 
 HUD.prototype.update = function() {
+    var text = "";
 
+    text += " X: " + player.entity.body.x + "\n";
+    text += " Y: " + player.entity.body.y + "\n";
+    text += "dX: " + player.entity.body.velocity.x + "\n";
+    text += "dY: " + player.entity.body.velocity.y + "\n";
+    text += "__: " + player.entity.body.touching.down + "\n";
+    text += "FR: " + this.game.time.fps;
+
+    this.text.debug.text = text;
+    this.text.health.text = "<3: " + player.health;
 };
