@@ -9,8 +9,14 @@ body {
 }
 
 body > #gamefield {
-
+    height: 448px;
+    line-height: 448px;
 }
+
+body > #gamefield > span {
+    font-size: 16px;
+}
+
 body > #gamefield > canvas {
     margin: 0 auto;
 }

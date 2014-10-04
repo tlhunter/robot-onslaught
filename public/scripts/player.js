@@ -67,6 +67,10 @@ Player.prototype.update = function() {
         }
     }
 
+    if (this.isDebug()) {
+        game.enableDebugMode();
+    };
+
     // Phaser seems incapable of snapping to full pixels :'(
     if (!moving) {
         this.entity.body.x = Math.round(this.entity.body.x);
@@ -124,4 +128,8 @@ Player.prototype.aimEast = function() {
 
 Player.prototype.isFiring = function() {
     return this.keyboard.isDown(Phaser.Keyboard.SPACEBAR);
+};
+
+Player.prototype.isDebug = function() {
+    return this.keyboard.isDown(Phaser.Keyboard.TILDE);
 };
