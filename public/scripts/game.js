@@ -29,7 +29,6 @@ game = new Phaser.Game(24*32, 14*32, Phaser.AUTO, 'gamefield', {
     },
 
     loadUpdate: function() {
-        console.log('loadUpdate', game.load.progress);
         progressJs().set(game.load.progress);
     }
 });

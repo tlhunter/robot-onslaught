@@ -64,12 +64,14 @@ World.prototype.create = function() {
 
     this.background.create(50 * this.BLOCK.w, 50 * this.BLOCK.h, 'terrain', 20);
     this.background.create(50 * this.BLOCK.w, 49 * this.BLOCK.h, 'terrain', 6);
-    this.background.create(50 * this.BLOCK.w, 48 * this.BLOCK.h, 'terrain', 42);
+    this.middleground.create(50 * this.BLOCK.w, 48 * this.BLOCK.h, 'terrain', 42);
     this.foreground.create(50 * this.BLOCK.w, 47 * this.BLOCK.h, 'terrain', 30);
+
+    this.middleground.setAll('body.immovable', true);
 };
 
 World.prototype.update = function() {
-    //this.game.physics.arcade.collide(player.entity, this.foreground);
+    this.game.physics.arcade.collide(player.entity, this.middleground);
     //this.game.physics.arcade.collide(pickups.entities, this.foreground);
 };
 

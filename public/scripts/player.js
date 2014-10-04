@@ -24,6 +24,8 @@ Player.prototype.create = function() {
     this.entity.body.collideWorldBounds = true;
     this.entity.linearDamping = 0.1;
 
+    this.entity.body.setSize(24, 24, 16, 48);
+
     this.entity.animations.add('alive', [0, 1, 0, 2], 2, true);
     this.entity.animations.add('dead', [3], 1000, false);
 
