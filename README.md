@@ -1,6 +1,6 @@
 # Robot Deathmatch
 
-SCREENSHOT GOES HERE
+![Screenshot](assets/screenshot.png)
 
 Entry into the [PubNub 2014 Competition](http://pubnubgame.challengepost.com/) by Thomas Hunter.
 
