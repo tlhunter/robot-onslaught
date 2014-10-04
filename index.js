@@ -24,7 +24,7 @@ pubnub.subscribe({
         console.log(data);
     },
     connect: function() {
-        console.log('connected');
+        console.log('Subscribed to PubNub:' + pubnub_config.channel);
     },
     presence: function (data) {
         console.log('presence', data);
@@ -35,7 +35,8 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-console.log(port);
 app.use(express.static(__dirname + '/public'));
 
 app.listen(port);
+
+console.log("Listening on ANY_ADDR:" + port)
