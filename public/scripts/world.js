@@ -63,7 +63,7 @@ World.prototype.create = function() {
     this.middleground.enableBody = true;
 
     this.hostileground = this.game.add.group();
-    this.hostileground.enableBody = false;
+    this.hostileground.enableBody = true;
 
     this.foreground = this.game.add.group();
     this.foreground.enableBody = false;

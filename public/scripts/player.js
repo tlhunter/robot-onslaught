@@ -37,14 +37,25 @@ Player.prototype.create = function() {
     this.entity.animations.add('alive', [0, 1, 0, 2], 2, true);
     this.entity.animations.add('dead', [3], 1000, false);
 
-    this.entity.animations.play('alive');
-
     world.middleground.add(this.entity);
 
-    reportSpawn(this.entity.body.x, this.entity.body.y);
+    this.spawn();
+};
+
+Player.prototype.spawn = function() {
+    this.entity.x = world.BLOCK.w * 50
+    this.entity.y = world.BLOCK.h * 50 - 24;
+    this.health = 5;
+    this.entity.animations.play('alive');
+    world.sounds.spawn.play();
+    reportSpawn(this.entity.x, this.entity.y);
 };
 
 Player.prototype.update = function() {
+    if (this.health <= 0) {
+        return;
+    }
+
     var time = Date.now();
 
     this.entity.body.velocity.x = this.entity.body.velocity.y = 0;
@@ -108,20 +119,55 @@ Player.prototype.hurt = function() {
     this.health -= 1;
 
     if (this.health <= 0) {
-        world.sounds.death.play();
-        this.entity.animations.play('dead');
+        this.kill();
+
         return;
     }
 
     world.sounds.damage.play();
 };
 
+Player.prototype.kill = function() {
+    world.sounds.death.play();
+    this.entity.animations.play('dead');
+    var self = this;
+
+    reportDeath();
+
+    setTimeout(
+        function() {
+            self.spawn();
+        }, 2000
+    )
+};
+
 Player.prototype.shoot = function(dir, time) {
     world.sounds.shoot.play();
+    var xmod = 0;
+    var ymod = 0;
+
+    switch(dir) {
+        case 0:
+            xmod = 2;
+            ymod = -48;
+            break;
+        case 1:
+            xmod = 16;
+            ymod = -32;
+            break;
+        case 2:
+            xmod = 2;
+            ymod = -16;
+            break;
+        case 3:
+            xmod = -8;
+            ymod = -32;
+            break;
+    }
 
     var bullet = {
-        x: this.entity.body.x,
-        y: this.entity.body.y,
+        x: this.entity.body.x + xmod,
+        y: this.entity.body.y + ymod,
         dir: dir
     };
 

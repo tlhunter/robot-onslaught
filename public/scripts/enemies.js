@@ -20,6 +20,9 @@ Enemies.prototype.update = function() {
 
 Enemies.prototype.add = function(enemy) {
     if (this.enemies[enemy.client]) {
+        this.enemies[enemy.client].entity.x = enemy.x;
+        this.enemies[enemy.client].entity.y = enemy.y;
+        this.enemies[enemy.client].entity.animations.play('alive');
         return;
     }
 
@@ -27,6 +30,11 @@ Enemies.prototype.add = function(enemy) {
     this.enemies[enemy.client].entity = this.game.add.sprite(enemy.x - 16, enemy.y - 48, 'avatar');
 
     var entity = this.enemies[enemy.client].entity;
+
+    this.game.physics.arcade.enable(entity);
+
+    entity.immovable = true;
+    entity.body.immovable = true;
 
     entity.animations.add('alive', [0, 1, 0, 2], 2, true);
     entity.animations.add('dead', [3], 1000, false);

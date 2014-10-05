@@ -26,7 +26,7 @@ $(function() {
             channel: channel,
 
             message: function(data) {
-                if (data.client === client_id) {
+                if (data.client === client_id || game.load.progress < 100) {
                     return;
                 }
 
@@ -134,6 +134,16 @@ function reportShoot(bullet) {
             x: Math.round(bullet.x),
             y: Math.round(bullet.y),
             dir: bullet.dir
+        }
+    });
+}
+
+function reportDeath() {
+    pubnub.publish({
+        channel: channel,
+        message: {
+            client: client_id,
+            type: 'death'
         }
     });
 }

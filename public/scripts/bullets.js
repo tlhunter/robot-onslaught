@@ -18,23 +18,33 @@ Bullets.prototype.create = function() {
 
 Bullets.prototype.update = function() {
     for (var i = 0; i < this.bullets.length; i++) {
-        this.game.physics.arcade.collide(this.bullets[i].entity, this.middleground, this.collisionHandler);
         this.game.physics.arcade.collide(this.bullets[i].entity, player.entity, this.shotHandler);
+        this.game.physics.arcade.collide(this.bullets[i].entity, world.middleground, this.collisionHandler);
+        this.game.physics.arcade.collide(this.bullets[i].entity, world.hostileground, this.enemyHitHandler);
     }
 };
 
 Bullets.prototype.collisionHandler = function(bullet, collide) {
     console.log('bullet destroy');
-    bullet.body.destroy();
+    bullet.kill();
     // TODO: remove from array
 };
 
 Bullets.prototype.shotHandler = function (bullet, player_body) {
     console.log("I've been hit!");
 
-    bullet.destroy();
+    bullet.kill();
 
     player.hurt();
+};
+
+Bullets.prototype.enemyHitHandler = function(bullet, enemy_body) {
+    console.log('enemy hit');
+    world.sounds.damage.play();
+
+    bullet.kill();
+
+    return false;
 };
 
 Bullets.prototype.add = function(bullet) {
@@ -45,7 +55,7 @@ Bullets.prototype.add = function(bullet) {
         case 0:
             bullet.entity.animations.add('north', [0, 1], 8, true);
             bullet.entity.animations.play('north');
-            bullet.entity.body.setSize(6, 10, 9, 0);
+            bullet.entity.body.setSize(6, 10, 9, 18);
             bullet.entity.body.velocity.y = -this.SPEED;
             bullet.entity.body.checkCollision.up = true;
             bullet.entity.body.checkCollision.down = false;
@@ -56,7 +66,7 @@ Bullets.prototype.add = function(bullet) {
         case 1:
             bullet.entity.animations.add('east', [2, 3], 8, true);
             bullet.entity.animations.play('east');
-            bullet.entity.body.setSize(10, 6, 14, 9);
+            bullet.entity.body.setSize(10, 6, 14, 27);
             bullet.entity.body.velocity.x = this.SPEED;
             bullet.entity.body.checkCollision.up = false;
             bullet.entity.body.checkCollision.down = false;
@@ -67,7 +77,7 @@ Bullets.prototype.add = function(bullet) {
         case 2:
             bullet.entity.animations.add('south', [4, 5], 8, true);
             bullet.entity.animations.play('south');
-            bullet.entity.body.setSize(6, 10, 9, 18);
+            bullet.entity.body.setSize(6, 10, 9, 38);
             bullet.entity.body.velocity.y = this.SPEED;
             bullet.entity.body.checkCollision.up = false;
             bullet.entity.body.checkCollision.down = true;
@@ -78,7 +88,7 @@ Bullets.prototype.add = function(bullet) {
         case 3:
             bullet.entity.animations.add('west', [6, 7], 8, true);
             bullet.entity.animations.play('west');
-            bullet.entity.body.setSize(10, 6, 0, 9);
+            bullet.entity.body.setSize(10, 6, 0, 27);
             bullet.entity.body.velocity.x = -this.SPEED;
             bullet.entity.body.checkCollision.up = false;
             bullet.entity.body.checkCollision.down = false;
@@ -94,25 +104,4 @@ Bullets.prototype.add = function(bullet) {
     world.middleground.add(bullet.entity);
 
     this.bullets.push(bullet);
-};
-
-Bullets.prototype.destroy = function(enemy) {
-    if (!this.enemies[enemy.client]) {
-        return;
-    }
-
-    this.enemies[enemy.client].entity.animations.play('dead');
-    // TODO: Delete after period of time
-};
-
-Bullets.prototype.move = function(enemy) {
-    if (!this.enemies[enemy.client]) {
-        this.add(enemy);
-    }
-
-    var entity = this.enemies[enemy.client].entity;
-
-    entity.x = enemy.x - 16;
-    entity.y = enemy.y - 48;
-    //entity.z = -1 * Math.floor(enemy.y - 48);
 };
