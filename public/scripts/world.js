@@ -67,10 +67,6 @@ World.prototype.create = function() {
 
     this.buildMap();
 
-    this.background.create(50 * this.BLOCK.w, 49 * this.BLOCK.h, 'terrain', 6);
-    this.middleground.create(50 * this.BLOCK.w, 48 * this.BLOCK.h, 'terrain', 42);
-    this.foreground.create(50 * this.BLOCK.w, 47 * this.BLOCK.h, 'terrain', 30);
-
     this.middleground.setAll('body.immovable', true);
 };
 
@@ -127,6 +123,10 @@ World.prototype.buildMap = function() {
                 if (tile === 1) {
                     // TODO: Lots of ugly logic :(
                     this.background.create(x * w, y * h, 'terrain', 20);
+                } else if (tile === 2) {
+                    this.background.create(x * w, y * h, 'terrain', 4);
+                } else if (tile === 10) {
+                    this.background.create(x * w, y * h, 'terrain', 62);
                 }
                 // Floor
             } else if (tile < 40) {

@@ -19,7 +19,7 @@ Player.prototype.preload = function() {
 };
 
 Player.prototype.create = function() {
-    this.entity = this.game.add.sprite(world.BLOCK.w * 50, world.BLOCK.h * 50, 'avatar');
+    this.entity = this.game.add.sprite(world.BLOCK.w * 50, world.BLOCK.h * 50 - 24, 'avatar');
     this.game.physics.arcade.enable(this.entity);
     this.entity.body.collideWorldBounds = true;
     this.entity.linearDamping = 0.1;
