@@ -33,9 +33,7 @@ World.prototype.preload = function() {
     this.game.load.audio('spawn', 'audio/spawn.wav');
 
     // Map Data
-    this.game.load.tilemap('background', 'data/level_0_0-background.csv', null, Phaser.Tilemap.CSV);
-    this.game.load.tilemap('middleground', 'data/level_0_0-middleground.csv', null, Phaser.Tilemap.CSV);
-    this.game.load.tilemap('foreground', 'data/level_0_0-foreground.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('level', 'data/level_0_0.csv', null, Phaser.Tilemap.CSV);
 
     // Game Settings
     this.game.world.setBounds(0, 0, 100 * this.BLOCK.w, 100 * this.BLOCK.h);
@@ -82,63 +80,82 @@ World.prototype.update = function() {
 };
 
 World.prototype.parseRawTilesheets = function() {
-    var raw = {};
-    var i;
+    var level = this.game.cache.getTilemapData('level').data.split('\n');
 
-    raw.background = this.game.cache.getTilemapData('background').data.split('\n');
-    for (i = 0; i < raw.background.length; i++) {
-        raw.background[i] = raw.background[i].split(',');
+    for (var y = 0; y < level.length; y++) {
+        level[y] = level[y].split(',');
+        for (var x = 0; x < level[y].length; x++) {
+            level[y][x] = parseInt(level[y][x], 10);
+        }
     }
 
-    delete raw.background[100];
-
-    raw.middleground = this.game.cache.getTilemapData('middleground').data.split('\n');
-    for (i = 0; i < raw.middleground.length; i++) {
-        raw.middleground[i] = raw.middleground[i].split(',');
+    if (level[100]) {
+        delete level[100];
     }
 
-    delete raw.middleground[100];
-
-    raw.foreground = this.game.cache.getTilemapData('foreground').data.split('\n');
-    for (i = 0; i < raw.foreground.length; i++) {
-        raw.foreground[i] = raw.foreground[i].split(',');
-    }
-
-    delete raw.foreground[100];
-
-    return raw;
+    return level;
 };
 
 /**
  * This is a heavy process, so optimize the heck out of it
  */
 World.prototype.buildMap = function() {
-    var raw_layers = this.parseRawTilesheets(),
-        bgl = raw_layers.background,
-        mgl = raw_layers.middleground,
-        fgl = raw_layers.foreground,
-        bg, mg, fg, xpos, ypos,
+    var level = this.parseRawTilesheets(),
+        tile,
         w = this.BLOCK.w,
         h = this.BLOCK.h;
 
-    for (var y = 0; y < 100; y++) {
-        for (var x = 0; x < 100; x++) {
-            xpos = x * w;
-            ypos = y * h;
-            bg = parseInt(bgl[x][y], 10);
-            if (bg >= 0) {
-                this.background.create(xpos, ypos, 'terrain', bg);
+    // Never going to look at tiles adjacent to the edge.
+    // This makes it a lot easier to look for neighbors
+    // Also, NEVER put a floor on an edge tile
+    for (var y = 1; y < 99; y++) {
+        for (var x = 1; x < 99; x++) {
+            tile = level[y][x];
+
+            if (tile === 0) {
+                // Abyss
+                if (level[y-1][x]) {
+                    // If there is a floor north of us, and we're abyss, add a shadow
+                    this.background.create(x * w, y * h, 'terrain', 16);
+                }
+
+                if (level[y-1][x] || level[y][x+1] || level[y][x-1] || level[y+1][x]) {
+                    // If this abyss has a item N, E, S, W of it, then add an invisible foreground for collision
+                    this.middleground.create(x * w, y * h, 'terrain', 83);
+                }
+            } else if (tile < 20) {
+                if (tile === 1) {
+                    // TODO: Lots of ugly logic :(
+                    this.background.create(x * w, y * h, 'terrain', 20);
+                }
+                // Floor
+            } else if (tile < 40) {
+                // Solid
+                if (tile >= 20 && tile <= 22) {
+                    // Block, Computer A, and Computer B have same tops
+                    this.foreground.create(x * w, (y-1) * h, 'terrain', 30);
+
+                    if (tile === 20) {
+                        // BLOCK
+                        this.middleground.create(x * w, y * h, 'terrain', 42);
+                    } else if (tile === 21) {
+                        // COMPUTER A
+                        this.middleground.create(x * w, y * h, 'terrain', 43);
+                    } else if (tile === 22) {
+                        // COMPUTER B
+                        this.middleground.create(x * w, y * h, 'terrain', 44);
+                    }
+                } else if (tile === 23) {
+                    // SOLID A
+                    this.foreground.create(x * w, (y-1) * h, 'terrain', 31);
+                    this.middleground.create(x * w, y * h, 'terrain', 45);
+                } else if (tile === 24) {
+                    // SOLID B
+                    this.foreground.create(x * w, (y-1) * h, 'terrain', 59);
+                    this.middleground.create(x * w, y * h, 'terrain', 73);
+                }
             }
 
-            mg = parseInt(mgl[x][y], 10);
-            if (mg >= 0) {
-                this.middleground.create(xpos, ypos, 'terrain', mg);
-            }
-
-            fg = parseInt(fgl[x][y], 10);
-            if (fg >= 0) {
-                this.foreground.create(xpos, ypos, 'terrain', fg);
-            }
         }
     }
 };
