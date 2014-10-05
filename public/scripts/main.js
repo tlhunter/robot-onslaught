@@ -1,6 +1,6 @@
 "use strict";
 
-var world, player, hud, pickups, enemies, game;
+var world, player, hud, pickups, enemies, bullets, game;
 
 var client_id;
 var pubnub;
@@ -26,6 +26,10 @@ $(function() {
             channel: channel,
 
             message: function(data) {
+                if (data.client === client_id) {
+                    return;
+                }
+
                 console.log(data);
 
                 if (data.type === 'spawn') {
@@ -33,6 +37,7 @@ $(function() {
                     enemies.add(data);
                 } else if (data.type === 'shoot') {
                     world.sounds.shoot.play();
+                    bullets.add(data);
                     // TODO: bullet magic
                 } else if (data.type === 'death') {
                     world.sounds.death.play();
@@ -40,7 +45,7 @@ $(function() {
                 } else if (data.type === 'pickup') {
                     world.sounds.pickup.play();
                     // TODO: Remove from pickups
-                } else if (data.type === 'move' && data.client !== client_id) {
+                } else if (data.type === 'move') {
                     enemies.move(data);
                 }
             },
@@ -61,6 +66,7 @@ function init() {
             player.preload();
             pickups.preload();
             enemies.preload();
+            bullets.preload();
         },
 
         create: function() {
@@ -70,6 +76,7 @@ function init() {
             player.create();
             pickups.create();
             enemies.create();
+            bullets.create();
         },
 
         update: function() {
@@ -78,6 +85,7 @@ function init() {
             player.update();
             pickups.update();
             enemies.update();
+            bullets.update();
         },
 
         loadUpdate: function() {
@@ -90,6 +98,7 @@ function init() {
     hud = new HUD(game);
     pickups = new Pickups(game);
     enemies = new Enemies(game);
+    bullets = new Bullets(game);
 }
 
 function reportLocation(x, y) {
@@ -110,8 +119,21 @@ function reportSpawn(x, y) {
         message: {
             client: client_id,
             type: 'spawn',
-            x: x,
-            y: y
+            x: Math.round(x),
+            y: Math.round(y)
+        }
+    });
+}
+
+function reportShoot(bullet) {
+    pubnub.publish({
+        channel: channel,
+        message: {
+            client: client_id,
+            type: 'shoot',
+            x: Math.round(bullet.x),
+            y: Math.round(bullet.y),
+            dir: bullet.dir
         }
     });
 }

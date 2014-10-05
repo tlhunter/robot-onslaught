@@ -179,6 +179,17 @@ World.prototype.buildMap = function() {
 World.prototype.tileLogic = function (n, ne, e, se, s, sw, w, nw) {
     if (n && ne && e && se && s && sw && w && nw) return 20;
     if (!n && !ne && !e && !se && !s && !sw && !w && !nw) return 4;
+
+    if (n && ne && e && se && s && sw && w && !nw) return 23;
+    if (n && ne && e && se && s && !sw && w && nw) return 9;
+    if (n && ne && e && !se && s && sw && w && nw) return 8;
+    if (n && !ne && e && se && s && sw && w && nw) return 22;
+
+    if (n && ne && e && se && s && !sw && w && !nw) return 37;
+    if (n && ne && e && !se && s && !sw && w && nw) return 36;
+    if (n && !ne && e && !se && s && sw && w && nw) return 39;
+    if (n && !ne && e && se && s && sw && w && !nw) return 38;
+
     if (n && w  && !e && !s && se) return 10;
     if (n && s && !w && !e) return 18;
     if (!n && !s && w && e) return 32;

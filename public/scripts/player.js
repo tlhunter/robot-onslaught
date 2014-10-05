@@ -16,7 +16,7 @@ var Player = function(game) {
     // Time the last position was sent to pubnub
     this.last_reported_position = 0;
     // Delay between reporting messages to pubnub, MS
-    this.POSITION_DELAY = 200;
+    this.POSITION_DELAY = 300;
     // Have we moved and need to tell pubnub?
     this.position_dirty = true;
 };
@@ -46,6 +46,7 @@ Player.prototype.create = function() {
 
 Player.prototype.update = function() {
     var time = Date.now();
+
     this.entity.body.velocity.x = this.entity.body.velocity.y = 0;
     var moving = false;
 
@@ -73,11 +74,20 @@ Player.prototype.update = function() {
         this.position_dirty = true;
     }
 
-    if (this.isFiring()) {
-        if (this.last_shoot < time - this.SHOOT_DELAY) {
-            world.sounds.shoot.play();
-            this.last_shoot = time;
-        }
+    if (this.aimNorth() && this.last_shoot < time - this.SHOOT_DELAY) {
+        this.shoot(0, time);
+    }
+
+    if (this.aimEast() && this.last_shoot < time - this.SHOOT_DELAY) {
+        this.shoot(1, time);
+    }
+
+    if (this.aimSouth() && this.last_shoot < time - this.SHOOT_DELAY) {
+        this.shoot(2, time);
+    }
+
+    if (this.aimWest() && this.last_shoot < time - this.SHOOT_DELAY) {
+        this.shoot(3, time);
     }
 
     if (this.position_dirty && this.last_reported_position < time - this.POSITION_DELAY) {
@@ -92,6 +102,34 @@ Player.prototype.update = function() {
     }
 
     this.game.camera.follow(this.entity);
+};
+
+Player.prototype.hurt = function() {
+    this.health -= 1;
+
+    if (this.health <= 0) {
+        world.sounds.death.play();
+        this.entity.animations.play('dead');
+        return;
+    }
+
+    world.sounds.damage.play();
+};
+
+Player.prototype.shoot = function(dir, time) {
+    world.sounds.shoot.play();
+
+    var bullet = {
+        x: this.entity.body.x,
+        y: this.entity.body.y,
+        dir: dir
+    };
+
+    bullets.add(bullet);
+
+    this.last_shoot = time;
+
+    reportShoot(bullet);
 };
 
 Player.prototype.getCoordinate = function(accurate) {
@@ -138,12 +176,4 @@ Player.prototype.aimWest = function() {
 
 Player.prototype.aimEast = function() {
     return this.keyboard.isDown(Phaser.Keyboard.RIGHT);
-};
-
-Player.prototype.isFiring = function() {
-    return this.keyboard.isDown(Phaser.Keyboard.SPACEBAR);
-};
-
-Player.prototype.isDebug = function() {
-    return this.keyboard.isDown(Phaser.Keyboard.TILDE);
 };
