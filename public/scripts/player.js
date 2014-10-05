@@ -44,7 +44,7 @@ Player.prototype.create = function() {
     this.spawn();
 
     var self = this;
-    
+
     setInterval(function() {
         reportHeartbeat(self.entity.body.x, self.entity.body.y)
     }, this.HEARTBEAT_DELAY)
