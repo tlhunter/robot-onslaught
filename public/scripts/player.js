@@ -8,8 +8,17 @@ var Player = function(game) {
 
     this.keyboard = null;
 
+    // Delay between shots fired, MS
     this.SHOOT_DELAY = 350;
+    // Time the last bullet was shot
     this.last_shoot = 0;
+
+    // Time the last position was sent to pubnub
+    this.last_reported_position = 0;
+    // Delay between reporting messages to pubnub, MS
+    this.POSITION_DELAY = 200;
+    // Have we moved and need to tell pubnub?
+    this.position_dirty = true;
 };
 
 Player.prototype.preload = function() {
@@ -22,7 +31,6 @@ Player.prototype.create = function() {
     this.entity = this.game.add.sprite(world.BLOCK.w * 50, world.BLOCK.h * 50 - 24, 'avatar');
     this.game.physics.arcade.enable(this.entity);
     this.entity.body.collideWorldBounds = true;
-    this.entity.linearDamping = 0.1;
 
     this.entity.body.setSize(30, 20, 16, 48);
 
@@ -32,9 +40,12 @@ Player.prototype.create = function() {
     this.entity.animations.play('alive');
 
     world.middleground.add(this.entity);
+
+    reportSpawn(this.entity.body.x, this.entity.body.y);
 };
 
 Player.prototype.update = function() {
+    var time = Date.now();
     this.entity.body.velocity.x = this.entity.body.velocity.y = 0;
     var moving = false;
 
@@ -58,13 +69,20 @@ Player.prototype.update = function() {
         moving = true;
     }
 
-    if (this.isFiring()) {
-        var time = Date.now();
+    if (moving) {
+        this.position_dirty = true;
+    }
 
-        if (this.last_shoot < Date.now() - this.SHOOT_DELAY) {
+    if (this.isFiring()) {
+        if (this.last_shoot < time - this.SHOOT_DELAY) {
             world.sounds.shoot.play();
             this.last_shoot = time;
         }
+    }
+
+    if (this.position_dirty && this.last_reported_position < time - this.POSITION_DELAY) {
+        this.position_dirty = false;
+        reportLocation(this.entity.body.x, this.entity.body.y);
     }
 
     // Phaser seems incapable of snapping to full pixels :'(
