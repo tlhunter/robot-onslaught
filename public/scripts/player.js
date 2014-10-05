@@ -19,6 +19,8 @@ var Player = function(game) {
     this.POSITION_DELAY = 500;
     // Have we moved and need to tell pubnub?
     this.position_dirty = true;
+
+    this.HEARTBEAT_DELAY = 2000;
 };
 
 Player.prototype.preload = function() {
@@ -40,6 +42,12 @@ Player.prototype.create = function() {
     world.middleground.add(this.entity);
 
     this.spawn();
+
+    var self = this;
+    
+    setInterval(function() {
+        reportHeartbeat(self.entity.body.x, self.entity.body.y)
+    }, this.HEARTBEAT_DELAY)
 };
 
 Player.prototype.spawn = function() {

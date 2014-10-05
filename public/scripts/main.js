@@ -47,6 +47,8 @@ $(function() {
                     // TODO: Remove from pickups
                 } else if (data.type === 'move') {
                     enemies.move(data);
+                } else if (data.type === 'heartbeat') {
+                    enemies.heartbeat(data);
                 }
             },
             connect: function() {
@@ -117,8 +119,8 @@ function reportSpawn(x, y) {
     pubnub.publish({
         channel: channel,
         message: {
-            client: client_id,
             type: 'spawn',
+            client: client_id,
             x: Math.round(x),
             y: Math.round(y)
         }
@@ -129,8 +131,8 @@ function reportShoot(bullet) {
     pubnub.publish({
         channel: channel,
         message: {
-            client: client_id,
             type: 'shoot',
+            client: client_id,
             x: Math.round(bullet.x),
             y: Math.round(bullet.y),
             dir: bullet.dir
@@ -142,8 +144,20 @@ function reportDeath() {
     pubnub.publish({
         channel: channel,
         message: {
+            type: 'death',
+            client: client_id
+        }
+    });
+}
+
+function reportHeartbeat(x, y) {
+    pubnub.publish({
+        channel: channel,
+        message: {
+            type: 'heartbeat',
             client: client_id,
-            type: 'death'
+            x: Math.round(x),
+            y: Math.round(y)
         }
     });
 }
