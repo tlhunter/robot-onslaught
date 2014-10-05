@@ -2,7 +2,7 @@
 
 ![Screenshot](assets/screenshot.png)
 
-Entry into the [PubNub 2014 Competition](http://pubnubgame.challengepost.com/) by Thomas Hunter.
+Entry into the [PubNub 2014 Competition](http://pubnubgame.challengepost.com/submissions/28062-robot-onslaught) by Thomas Hunter.
 
 ## Play The Game
 
@@ -10,7 +10,7 @@ Visit [thomashunter.name/games/robot-onslaught](https://thomashunter.name/games/
 
 I've only tested this in Chrome and Firefox.
 
-Use WASD to move and the ARROW keys to shoot.
+Use WASD to move and the ARROW keys to shoot. Pro Tip: Map these to a gamepad ;)
 
 ## Sources
 
@@ -19,3 +19,4 @@ Use WASD to move and the ARROW keys to shoot.
 * Server built with [Node.js](http://nodejs.org/)
 * Progress bar using [Progress.js](http://usablica.github.io/progress.js/)
 * And of course, network transport via [PubNub](http://www.pubnub.com/)
+* Sound Effects, robot, and Music by me
