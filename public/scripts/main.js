@@ -12,7 +12,7 @@ $(function() {
         theme: 'onslaught'
     }).start();
 
-    $.get('/config/pubnub.json', function (data) {
+    $.get('config/pubnub.json', function (data) {
         client_id = PUBNUB.uuid();
         channel = data.channel;
 
@@ -98,8 +98,8 @@ function reportLocation(x, y) {
         message: {
             type: 'move',
             client: client_id,
-            x: x,
-            y: y
+            x: Math.round(x), // bandwidth > accuracy
+            y: Math.round(y)
         }
     });
 }

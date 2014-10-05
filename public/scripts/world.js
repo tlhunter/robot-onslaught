@@ -102,7 +102,8 @@ World.prototype.buildMap = function() {
     var level = this.parseRawTilesheets(),
         tile,
         w = this.BLOCK.w,
-        h = this.BLOCK.h;
+        h = this.BLOCK.h,
+        tile_offset;
 
     // Never going to look at tiles adjacent to the edge.
     // This makes it a lot easier to look for neighbors
@@ -125,7 +126,19 @@ World.prototype.buildMap = function() {
             } else if (tile < 20) {
                 if (tile === 1) {
                     // TODO: Lots of ugly logic :(
-                    this.background.create(x * w, y * h, 'terrain', 20);
+                    //this.background.create(x * w, y * h, 'terrain', 20);
+                    tile_offset = this.tileLogic(
+                        level[y-1][x],
+                        level[y-1][x+1],
+                        level[y][x+1],
+                        level[y+1][x+1],
+                        level[y+1][x],
+                        level[y+1][x-1],
+                        level[y][x-1],
+                        level[y-1][x-1]
+                    );
+                    this.background.create(x * w, y * h, 'terrain', tile_offset);
+
                 } else if (tile === 2) {
                     this.background.create(x * w, y * h, 'terrain', 4);
                 } else if (tile === 10) {
@@ -161,4 +174,22 @@ World.prototype.buildMap = function() {
 
         }
     }
+};
+
+World.prototype.tileLogic = function (n, ne, e, se, s, sw, w, nw) {
+    if (n && ne && e && se && s && sw && w && nw) return 20;
+    if (!n && !ne && !e && !se && !s && !sw && !w && !nw) return 4;
+    if (n && w  && !e && !s && se) return 10;
+    if (n && s && !w && !e) return 18;
+    if (!n && !s && w && e) return 32;
+    if (n && w && e && !s) return 34;
+    if (n && w && !e && s) return 21;
+    if (!n && w && e && s) return 6;
+    if (n && !w && e && s) return 19;
+    if (n && e && !s && !w) return 33;
+    if (!n && e && s && !w) return 5;
+    if (!n && !e && s && w) return 7;
+    if (n && !e && !s && w) return 35;
+
+    return 20; // fuck it
 };
