@@ -16,7 +16,7 @@ var Player = function(game) {
     // Time the last position was sent to pubnub
     this.last_reported_position = 0;
     // Delay between reporting messages to pubnub, MS
-    this.POSITION_DELAY = 300;
+    this.POSITION_DELAY = 500;
     // Have we moved and need to tell pubnub?
     this.position_dirty = true;
 };

@@ -6,7 +6,7 @@ var Bullets = function(game) {
     this.bullets = [];
 };
 
-Bullets.prototype.SPEED = 300;
+Bullets.prototype.SPEED = 600;
 
 Bullets.prototype.preload = function() {
     this.game.load.spritesheet('bullet', 'images/bullet.png', 24, 24);

@@ -41,14 +41,9 @@ HUD.prototype.create = function() {
         this.hearts.push(heart);
         this.hud.add(heart);
     }
-    //this.icons.dark.exists = false;
 
-    //this.text.score = this.game.add.text(16, 16, 'POINTS: 0', this.FONT);
-   // this.text.health = this.game.add.text(16, 16, 'HEALTH: 5/5', this.FONT);
     this.text.debug = this.game.add.text(8, 40, '', this.FONT_SMALL);
 
-   // this.hud.add(this.text.score);
-   // this.hud.add(this.text.health);
     this.hud.add(this.text.debug);
 };
 
@@ -69,5 +64,4 @@ HUD.prototype.update = function() {
             this.hearts[i].exists = true;
         }
     }
-   // this.text.health.text = "HEALTH: " + player.health + "/5";
 };
