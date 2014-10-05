@@ -179,6 +179,7 @@
         }
 
         var percentElement = _getPercentElement(targetElement);
+        if (!percentElement) {return;}
         percentElement.style.width = parseInt(percent) + '%';
 
         var percentElement  = percentElement.querySelector(".progressjs-percent");
