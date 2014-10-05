@@ -74,10 +74,6 @@ function init() {
 
         loadUpdate: function() {
             progressJs().set(game.load.progress);
-        },
-
-        enableDebugMode: function() {
-
         }
     });
 
