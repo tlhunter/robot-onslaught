@@ -20,3 +20,11 @@ Use WASD to move and the ARROW keys to shoot. Pro Tip: Map these to a gamepad ;)
 * Progress bar using [Progress.js](http://usablica.github.io/progress.js/)
 * And of course, network transport via [PubNub](http://www.pubnub.com/)
 * Sound Effects, robot, and Music by me
+
+## Code Quality
+
+I learned Phaser and wrote this from scratch over the course of 10 hours, so the code is a bit ugly.
+
+## License
+
+The code that I've written is GPL, everything else falls under its own respective license.
