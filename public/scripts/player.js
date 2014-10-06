@@ -51,8 +51,9 @@ Player.prototype.create = function() {
 };
 
 Player.prototype.spawn = function() {
-    this.entity.x = world.BLOCK.w * 50
-    this.entity.y = world.BLOCK.h * 50 - 24;
+    var spawn = world.spawn_locations[Math.floor(Math.random() * world.spawn_locations.length)];
+    this.entity.x = world.BLOCK.w * spawn.x;
+    this.entity.y = world.BLOCK.h * spawn.y - 24;
     this.health = 5;
     this.entity.animations.play('alive');
     world.sounds.spawn.play();

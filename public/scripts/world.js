@@ -9,6 +9,9 @@ var World = function(game) {
     this.foreground = null;
     this.middleground = null;
     this.background = null;
+
+    this.spawn_locations = [];
+    this.SPAWN_TILE = 10;
 };
 
 World.prototype.BLOCK = {
@@ -85,6 +88,12 @@ World.prototype.parseRawTilesheets = function() {
         level[y] = level[y].split(',');
         for (var x = 0; x < level[y].length; x++) {
             level[y][x] = parseInt(level[y][x], 10);
+            if (level[y][x] === this.SPAWN_TILE) {
+                this.spawn_locations.push({
+                    x: x,
+                    y: y
+                });
+            }
         }
     }
 
