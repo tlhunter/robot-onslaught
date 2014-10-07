@@ -33,3 +33,7 @@ body > #credits {
 a {
     color: #a1cad4;
 }
+
+body > #embed {
+    display: none;
+}
