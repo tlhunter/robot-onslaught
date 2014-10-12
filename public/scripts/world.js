@@ -39,7 +39,6 @@ World.prototype.preload = function() {
     this.game.load.tilemap('level', 'data/level_0_0.csv', null, Phaser.Tilemap.CSV);
 
     // Game Settings
-    this.game.world.setBounds(0, 0, 100 * this.BLOCK.w, 100 * this.BLOCK.h);
     this.game.renderer.roundPixels = true;
     this.game.time.advancedTiming = true;
 };
@@ -71,9 +70,11 @@ World.prototype.create = function() {
     this.foreground = this.game.add.group();
     this.foreground.enableBody = false;
 
-    this.buildMap();
+    var realBounds = this.buildMap();
 
     this.middleground.setAll('body.immovable', true);
+
+    this.game.world.setBounds(0, 0, realBounds[0] * this.BLOCK.w, realBounds[1] * this.BLOCK.h);
 };
 
 World.prototype.update = function() {
@@ -97,10 +98,6 @@ World.prototype.parseRawTilesheets = function() {
         }
     }
 
-    if (level[100]) {
-        delete level[100];
-    }
-
     return level;
 };
 
@@ -113,13 +110,15 @@ World.prototype.buildMap = function() {
         w = this.BLOCK.w,
         h = this.BLOCK.h,
         tile_offset,
-        hull; // Ode to UT's Invisible Collision Hull
+        hull,
+        HEIGHT = level.length,
+        WIDTH = level[0].length; // Ode to UT's Invisible Collision Hull
 
     // Never going to look at tiles adjacent to the edge.
     // This makes it a lot easier to look for neighbors
     // Also, NEVER put a floor on an edge tile
-    for (var y = 1; y < 99; y++) {
-        for (var x = 1; x < 99; x++) {
+    for (var y = 1; y < HEIGHT - 1; y++) {
+        for (var x = 1; x < WIDTH - 1; x++) {
             tile = level[y][x];
 
             if (tile === 0) {
@@ -189,6 +188,8 @@ World.prototype.buildMap = function() {
 
         }
     }
+
+    return [WIDTH, HEIGHT];
 };
 
 World.prototype.tileLogic = function (n, ne, e, se, s, sw, w, nw) {
