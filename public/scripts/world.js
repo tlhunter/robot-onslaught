@@ -112,7 +112,8 @@ World.prototype.buildMap = function() {
         tile,
         w = this.BLOCK.w,
         h = this.BLOCK.h,
-        tile_offset;
+        tile_offset,
+        hull; // Ode to UT's Invisible Collision Hull
 
     // Never going to look at tiles adjacent to the edge.
     // This makes it a lot easier to look for neighbors
@@ -130,7 +131,12 @@ World.prototype.buildMap = function() {
 
                 if (level[y-1][x] || level[y][x+1] || level[y][x-1] || level[y+1][x]) {
                     // If this abyss has a item N, E, S, W of it, then add an invisible foreground for collision
-                    this.middleground.create(x * w, y * h, 'terrain', 83);
+                    // We only need to look for collision in the direction it faces a walkable tile
+                    hull = this.middleground.create(x * w, y * h, 'terrain', 83);
+                    hull.body.checkCollision.up = !!level[y-1][x];
+                    hull.body.checkCollision.right = !!level[y][x+1];
+                    hull.body.checkCollision.down = !!level[y+1][x];
+                    hull.body.checkCollision.left = !!level[y][x-1];
                 }
             } else if (tile < 20) {
                 if (tile === 1) {
