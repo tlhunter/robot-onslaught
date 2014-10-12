@@ -205,6 +205,12 @@ World.prototype.tileLogic = function (n, ne, e, se, s, sw, w, nw) {
     if (n && !ne && e && !se && s && sw && w && nw) return 39;
     if (n && !ne && e && se && s && sw && w && !nw) return 38;
 
+    if (n && !e && s && !sw && w && !nw) return 13;
+    if (!n && e && !se && s && !sw && w) return 12;
+    if (n && !ne && e && !se && s && !w) return 26;
+    if (n && !ne && e && !s && w && !nw) return 27;
+
+
     if (n && w  && !e && !s && se) return 10;
     if (n && s && !w && !e) return 18;
     if (!n && !s && w && e) return 32;
@@ -212,6 +218,12 @@ World.prototype.tileLogic = function (n, ne, e, se, s, sw, w, nw) {
     if (n && w && !e && s) return 21;
     if (!n && w && e && s) return 6;
     if (n && !w && e && s) return 19;
+
+    if (!n && !e && s && w && !sw) return 11;
+    if (!n && e && s && !w && !se) return 10;
+    if (n && e && !s && !w && !ne) return 24;
+    if (n && !e && !s && w && !nw) return 25;
+
     if (n && e && !s && !w) return 33;
     if (!n && e && s && !w) return 5;
     if (!n && !e && s && w) return 7;
